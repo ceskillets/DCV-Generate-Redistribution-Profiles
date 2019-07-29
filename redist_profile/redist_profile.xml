@@ -1,0 +1,14 @@
+  <entry name="{{ PROFILE_NAME }}">
+    <filter>
+      <type>
+        <member>{{ REDIS_TYPE }}</member>
+      </type>
+      <destination>
+        <member>{{ IP_ADDRESS }}</member>
+      </destination>
+    </filter>
+        <priority>{{ PRIORITY }}</priority>
+        <action>
+          <redist/>
+        </action>
+  </entry>

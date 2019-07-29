@@ -1,0 +1,60 @@
+name: redistribution_profiles
+# label used for menu selection
+label: Build Redistribution Profiles
+
+description:
+  This skillet help to templitize redistribution profiles for the default router in PANOS.
+
+# type of skillet (panos or panorama or template or terraform)
+type: panos
+
+# more complex skillets may express a dependency on another skillet that should be loaded before this one.
+# For example, a set of skillets may build off of a single 'golden config' that contains shared configuration
+# As this skillet is very simple, there is no need to build on another one.
+extends:
+
+# Labels allow grouping and type specific options and are generally only used in advanced cases
+labels:
+  collection:
+    - Datacenter Virtualization
+    - Configure
+
+variables:
+
+  - name: PROFILE_NAME
+    description: Set the profile name (Less than 16 characters)
+    default: redist_name
+    type_hint: text
+    
+  - name: REDIS_TYPE
+    description: Origin of original route
+    default: static
+    type_hint: dropdown
+    dd_list:
+      - key: 'connected'
+        value: 'connected'
+      - key: 'static'
+        value: 'static'
+      - key: 'OSPF'
+        value: 'ospf'
+      - key: 'BGP'
+        value: 'bgp'
+    
+    
+  - name: IP_ADDRESS
+    description: Prefix/Length to redistribute
+    default: 10.10.10.0/24
+    type_hint: text
+    
+  - name: PRIORITY
+    description: Priority [1-255]
+    default: 10
+    type_hint: number
+    attributes:
+      min: 1
+      max: 255
+
+snippets:
+  - xpath: /config/devices/entry[@name='localhost.localdomain']/network/virtual-router/entry[@name='default']/protocol/redist-profile
+    name: set dynamic update schedule
+    file: redist_profile.xml
